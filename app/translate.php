@@ -116,7 +116,7 @@ if (isset($_FILES['requests']['name']['document'])) {
         exit;
     }
 
-    putenv('GOOGLE_APPLICATION_CREDENTIALS=/path/to/your-service-account-file.json');
+    putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $_ENV['GOOGLE_APPLICATION_CREDENTIALS']);
 
     $fileContent = file_get_contents($fileDestination);
 
