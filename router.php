@@ -5,7 +5,11 @@ $routes = [
     '/' => 'index.php',
     '/translate' => [
         'GET' => '405.php',
-        'POST' => 'translate.php'
+        'POST' => __DIR__ . '/app/translate.php'
+    ],
+    '/translate-file' => [
+        'GET' => '405.php',
+        'POST' => __DIR__ . '/app/translate-file.php'
     ],
 ];
 
