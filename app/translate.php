@@ -139,7 +139,7 @@ if (isset($_FILES['requests']['name']['document'])) {
         $apiResponse = $translationServiceClient->translateDocument($request);
 
         if ($apiResponse->hasDocumentTranslation()) {
-            $createFileName = $session_id . "-" . "translated-" . time() . "-" . $fileType;
+            $createFileName = $session_id . "-" . "translated-" . time() . "." . $fileType;
             if (!file_exists($createFileName)) {
                 $fileHandler = fopen($createFileName, "wb");
                 $outputContent = $apiResponse->getDocumentTranslation()->getByteStreamOutputs();
