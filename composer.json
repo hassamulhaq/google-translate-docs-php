@@ -1,0 +1,23 @@
+{
+    "name": "hassamulhaq/google-translate-docs-php",
+    "description": "Translate docs file using Google Cloud Translation API",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "vlucas/phpdotenv": "^5.6",
+        "google/cloud-translate": "^1.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hassamulhaq\\GoogleTranslateDocsPhp\\": "src/"
+        }
+    },
+    "scripts": {
+        "start": "php -S localhost:8000 -t app app/router.php"
+    },
+    "authors": [
+        {
+            "name": "hassamulhaq"
+        }
+    ]
+}
