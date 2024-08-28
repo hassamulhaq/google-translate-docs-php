@@ -23,13 +23,23 @@ class DocumentTranslator
         $dotenv->load();
 
         putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $_ENV['GOOGLE_APPLICATION_CREDENTIALS']);
+
+        $this->checkServiceAccountJsonFileExists();
+
         $this->translationServiceClient = new TranslationServiceClient();
         $this->targetLanguageCode = $_POST['requests']['target_language_code'] ?? $_ENV['TARGET_LANGUAGE_CODE'];
         $this->uploadDir = $_ENV['UPLOAD_DIR_DOCUMENT'] ?? 'uploads/';
         $this->sessionId = uniqid();
 
         if (!file_exists($this->uploadDir)) {
-            mkdir($this->uploadDir, 0777, true);
+            mkdir($this->uploadDir, 0755, true);
+        }
+    }
+
+    private function checkServiceAccountJsonFileExists() {
+        if ($_ENV['GOOGLE_APPLICATION_CREDENTIALS'] == '' || !file_exists($_ENV['GOOGLE_APPLICATION_CREDENTIALS'])) {
+            http_response_code(404);
+            $this->sendError(404, 'File service-account.json is missing.');
         }
     }
 
@@ -60,7 +70,7 @@ class DocumentTranslator
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" => "xlsx"
         ];
 
-        return $map[$fileType] ?? 'txt';
+        return $map[$fileType] ?? 'doc';
     }
 
     public function handleRequest()
@@ -153,7 +163,7 @@ class DocumentTranslator
 
     private function createTranslatedFile($apiResponse, $fileType)
     {
-        $createFileName = $this->sessionId . "-translated-" . time() . "." . $this->getFileExtension($fileType);
+        $createFileName = $this->createTranslatedFileName($fileType);
         $filePath = $this->uploadDir . $createFileName;
 
         $fileHandler = fopen($filePath, "wb");
@@ -165,21 +175,33 @@ class DocumentTranslator
 
         fclose($fileHandler);
 
-        //header('Content-Type: application/octet-stream');
-        //header('Content-Disposition: attachment; filename="' . basename($createFileName) . '"');
-        //header('Content-Length: ' . filesize($filePath));
-        //readfile($filePath);
-
         // TODO: Optionally remove the file after download
         // unlink($filePath);
 
+        header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(["data" => ["translated_file" => $createFileName]]);
+        echo json_encode([
+            "data" => [
+                "translated_file" => $createFileName,
+                "translated_file_url" => $_ENV['APP_URL'] . '/' . $this->uploadDir . $createFileName
+            ]
+        ]);
+        exit;
+    }
+
+
+    private function createTranslatedFileName($fileType): string
+    {
+        $hashedId = hash('sha256', $this->sessionId);
+        $randomString = bin2hex(random_bytes(8));
+
+        return $this->sessionId . "-translated-" . $hashedId . "-" . $randomString . "." . $this->getFileExtension($fileType);
     }
 
 
     private function sendError($code, $message)
     {
+        header('Content-Type: application/json');
         http_response_code($code);
         echo json_encode([
             "responses" => [

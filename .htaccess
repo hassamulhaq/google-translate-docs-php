@@ -4,3 +4,15 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /router.php [L]
+
+
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|otf|json|xml|txt|doc|docs|docx|pdf|csv|html|'socs')$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Deny access to everything else
+<FilesMatch ".*">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

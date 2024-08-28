@@ -6,7 +6,8 @@
         "php": "^7.4|^8.2",
         "vlucas/phpdotenv": "^5.6",
         "google/cloud-translate": "^1.18",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-fileinfo": "*"
     },
     "autoload": {
         "psr-4": {
