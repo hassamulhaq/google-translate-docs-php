@@ -121,9 +121,12 @@ requests[target_language_code]=fr
 `/samples/devhassam.doc`
 ![preview04](samples/preview04.png)
 
-#### (After) Translated docs - samples are in /sample dir
+#### (After) Translated docs - Urdu, samples are in /sample dir
 `/samples/66ced9d1adeb2-translated-fa9b14194af3f545a97c2626cf976f142625bbae5bdf9eaaad1be05d61379422-92defdb9ec2a0125.doc`
 ![preview05](samples/preview05.png)
+
+###### (After) Translated docs - Chinese language "zh-CN"
+![preview06](samples/preview06.png)
 
 ___
 
